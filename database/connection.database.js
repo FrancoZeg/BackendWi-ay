@@ -1,18 +1,10 @@
-import 'dotenv/config';
-import pg from 'pg';
+import pkg from 'pg';
+const { Pool } = pkg;
 
-const { Pool } = pg;
-
-const connectionString = process.env.DATABASE_URL;
-
-export const db = new Pool({
-  allowExitOnIdle: true,
-  connectionString,
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false } // Render requiere SSL
 });
 
-try {
-  await db.query('SELECT NOW()');
-  console.log('DATABASE connected');
-} catch (error) {
-  console.log(error);
-}
+export default pool;
+
